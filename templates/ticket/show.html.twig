@@ -1,0 +1,122 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Chamado #{{ ticket.id }} - HelpDesk{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start mb-4">
+    <div>
+        <h1 class="mb-1"><i class="bi bi-ticket2"></i> Chamado #{{ ticket.id }}</h1>
+        <p class="text-muted mb-0">Aberto por {{ ticket.requester.name }} em {{ ticket.createdAt|date('d/m/Y H:i') }}</p>
+    </div>
+    <div class="d-flex gap-2">
+        {% if is_granted('edit', ticket) %}
+            <a href="{{ path('ticket_edit', { id: ticket.id }) }}" class="btn btn-outline-secondary">Editar</a>
+        {% endif %}
+        {% if is_granted('delete', ticket) %}
+            <form method="post" action="{{ path('ticket_delete', { id: ticket.id }) }}" onsubmit="return confirm('Remover este chamado?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete_' ~ ticket.id) }}">
+                <button type="submit" class="btn btn-outline-danger">Remover</button>
+            </form>
+        {% endif %}
+        <a href="{{ is_granted('ROLE_TECHNICIAN') ? path('ticket_manage') : path('ticket_index') }}" class="btn btn-outline-primary">Voltar</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8 mb-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ ticket.title }}</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-0" style="white-space: pre-line;">{{ ticket.description }}</p>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="bi bi-chat-left-text"></i> Comentários</h5>
+            </div>
+            <div class="card-body">
+                {% for comment in ticket.comments %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between">
+                            <strong>{{ comment.author.name }}</strong>
+                            <span class="text-muted small">{{ comment.createdAt|date('d/m/Y H:i') }}</span>
+                        </div>
+                        <p class="mb-0 mt-2" style="white-space: pre-line;">{{ comment.content }}</p>
+                    </div>
+                {% else %}
+                    <p class="text-muted mb-0">Nenhum comentário registrado.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Adicionar comentário</h5>
+            </div>
+            <div class="card-body">
+                {{ form_start(comment_form) }}
+                    {{ form_row(comment_form.content) }}
+                    {{ form_widget(comment_form.save) }}
+                {{ form_end(comment_form) }}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0">Detalhes</h5>
+            </div>
+            <div class="list-group list-group-flush">
+                <div class="list-group-item d-flex justify-content-between">
+                    <span>Status</span>
+                    <span class="badge text-bg-{{ ticket.status.badge }}">{{ ticket.status.label }}</span>
+                </div>
+                <div class="list-group-item d-flex justify-content-between">
+                    <span>Prioridade</span>
+                    <span class="badge text-bg-{{ ticket.priority.badge }}">{{ ticket.priority.label }}</span>
+                </div>
+                <div class="list-group-item d-flex justify-content-between">
+                    <span>Categoria</span>
+                    <strong>{{ ticket.category.name }}</strong>
+                </div>
+                <div class="list-group-item d-flex justify-content-between">
+                    <span>Técnico</span>
+                    <strong>{{ ticket.technician ? ticket.technician.name : 'Não atribuído' }}</strong>
+                </div>
+                <div class="list-group-item d-flex justify-content-between">
+                    <span>Atualizado</span>
+                    <strong>{{ ticket.updatedAt|date('d/m/Y H:i') }}</strong>
+                </div>
+            </div>
+        </div>
+
+        {% if is_granted('change_status', ticket) %}
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Alterar status</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ path('ticket_change_status', { id: ticket.id }) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('change_status_' ~ ticket.id) }}">
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Novo status</label>
+                            <select name="status" id="status" class="form-select">
+                                {% for status in statuses %}
+                                    <option value="{{ status.value }}" {{ status == ticket.status ? 'selected' : '' }}>
+                                        {{ status.label }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Atualizar status</button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,26 @@
+{{ form_start(form) }}
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8 mb-3">
+                    {{ form_row(form.title) }}
+                </div>
+                <div class="col-md-4 mb-3">
+                    {{ form_row(form.category) }}
+                </div>
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.priority) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_row(form.description) }}
+            </div>
+        </div>
+        <div class="card-footer d-flex gap-2">
+            {{ form_widget(form.save) }}
+            <a href="{{ ticket.id ? path('ticket_show', { id: ticket.id }) : path('ticket_index') }}" class="btn btn-outline-secondary">Cancelar</a>
+        </div>
+    </div>
+{{ form_end(form) }}

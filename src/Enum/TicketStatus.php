@@ -22,4 +22,15 @@ enum TicketStatus: string
             self::Closed => 'Fechado',
         };
     }
+
+    public function badge(): string
+    {
+        return match ($this) {
+            self::Open => 'primary',
+            self::InProgress => 'warning',
+            self::WaitingUser => 'info',
+            self::Resolved => 'success',
+            self::Closed => 'secondary',
+        };
+    }
 }
