@@ -1,0 +1,87 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="mb-0">Dashboard Administrativo</h1>
+        <div>
+            <a href="{{ path('admin_user_index') }}" class="btn btn-outline-primary me-2">
+                <i class="bi bi-people"></i> Usuários
+            </a>
+            <a href="{{ path('admin_category_index') }}" class="btn btn-outline-primary me-2">
+                <i class="bi bi-tags"></i> Categorias
+            </a>
+            <a href="{{ path('admin_dashboard') }}" class="btn btn-outline-primary">
+                <i class="bi bi-graph-up"></i> Relatórios
+            </a>
+        </div>
+    </div>
+    <div class="row mb-4">
+        {% set colors = {
+            'open': 'primary',
+            'in_progress': 'warning',
+            'waiting_user': 'info',
+            'resolved': 'success',
+            'closed': 'secondary'
+        } %}
+        {% set labels = {
+            'open': 'Aberto',
+            'in_progress': 'Em Atendimento',
+            'waiting_user': 'Aguardando Usuário',
+            'resolved': 'Resolvido',
+            'closed': 'Fechado'
+        } %}
+
+        {% for statusKey, label in labels %}
+            <div class="col-md mb-3">
+                <div class="card text-bg-{{ colors[statusKey] }} h-100 text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ label }}</h5>
+                        <p class="card-text display-6">{{ statusCounts[statusKey]|default(0) }}</p>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="card mb-4 border-danger">
+        <div class="card-header text-bg-danger">
+            <i class="bi bi-exclamation-triangle"></i> Chamados em Aberto Há Mais de 7 Dias (SLA)
+        </div>
+        <div class="card-body">
+            {% if oldTickets|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Status</th>
+                                <th>Abertura</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for ticket in oldTickets %}
+                            <tr>
+                                <td>#{{ ticket.id }}</td>
+                                <td>{{ ticket.title }}</td>
+                                <td><span class="{{ ticket.status.badgeClass() }}">{{ ticket.status.label() }}</span></td>
+                                <td>{{ ticket.createdAt|date('d/m/Y H:i') }}</td>
+                                <td>
+                                    <a href="{{ path('ticket_show', {id: ticket.id}) }}" class="btn btn-sm btn-outline-primary">Ver</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p class="text-success mb-0">Nenhum chamado atrasado no momento. Excelente trabalho!</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

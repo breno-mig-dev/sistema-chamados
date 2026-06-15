@@ -60,21 +60,21 @@
                             </a>
                         </li>
                         {% endif %}
-                        {% if 'ROLE_ADMIN' in app.user.roles %}
+                        {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-divider"></li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/users">
+                            <a class="nav-link" href="{{ path('admin_dashboard') }}">
+                                <i class="bi bi-graph-up"></i> Relatórios Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('admin_user_index') }}">
                                 <i class="bi bi-people"></i> Usuários
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/admin/categories">
+                            <a class="nav-link" href="{{ path('admin_category_index') }}">
                                 <i class="bi bi-tags"></i> Categorias
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/admin/dashboard">
-                                <i class="bi bi-graph-up"></i> Relatórios
                             </a>
                         </li>
                         {% endif %}

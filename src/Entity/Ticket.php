@@ -11,7 +11,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity()]
+#[ORM\Entity(repositoryClass: \App\Repository\TicketRepository::class)]
 #[ORM\Table(name: 'tickets')]
 class Ticket
 {
