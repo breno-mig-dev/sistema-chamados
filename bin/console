@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+
+use App\Kernel;
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Dotenv\Dotenv;
+
+if (!is_dir(dirname(__DIR__).'/vendor')) {
+    throw new LogicException('Dependencies are not installed, run "composer install".');
+}
+
+if (!is_file(dirname(__DIR__).'/vendor/autoload.php')) {
+    throw new LogicException('Autoload not found.');
+}
+
+require_once dirname(__DIR__).'/vendor/autoload.php';
+
+if (!class_exists(Dotenv::class)) {
+    throw new LogicException('Symfony Dotenv is not installed.');
+}
+
+(new Dotenv())->loadEnv(dirname(__DIR__).'/.env');
+
+$input = new ArgvInput();
+$env = $input->getParameterOption(['--env', '-e'], $_SERVER['APP_ENV'] ?? 'dev');
+$debug = (bool) ($_SERVER['APP_DEBUG'] ?? ('prod' !== $env));
+
+$kernel = new Kernel($env, $debug);
+$application = new Application($kernel);
+exit($application->run($input));
