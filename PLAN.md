@@ -806,8 +806,8 @@ docker compose up -d --build php
 
 **Objetivo:** Projeto rodando localmente com autenticação funcional.
 
-- [ ] Criar projeto Symfony: `composer create-project symfony/skeleton helpdesk`
-- [ ] Instalar pacotes essenciais:
+- [x] Criar projeto Symfony: `composer create-project symfony/skeleton helpdesk`
+- [x] Instalar pacotes essenciais:
   ```bash
   composer require symfony/orm-pack symfony/security-bundle \
     symfony/mailer symfony/twig-bundle symfony/form \
@@ -815,11 +815,11 @@ docker compose up -d --build php
     phpunit/phpunit phpstan/phpstan \
     friendsofphp/php-cs-fixer --dev
   ```
-- [ ] Configurar `.env` com `DATABASE_URL` e `MAILER_DSN`
-- [ ] Criar entidade `User` com roles via `make:user`
-- [ ] Implementar autenticação com `make:auth`
-- [ ] Criar primeira migração e executar
-- [ ] Criar `UserFixtures` com um usuário de cada role para testes
+- [x] Configurar `.env` com `DATABASE_URL` e `MAILER_DSN`
+- [x] Criar entidade `User` com roles via `make:user`
+- [x] Implementar autenticação com `make:auth`
+- [x] Criar primeira migração e executar
+- [x] Criar `UserFixtures` com um usuário de cada role para testes
 
 ---
 
@@ -827,14 +827,14 @@ docker compose up -d --build php
 
 **Objetivo:** CRUD completo de chamados com controle de acesso.
 
-- [ ] Criar entidades: `Category`, `Ticket`, `Comment`
-- [ ] Definir Enums `TicketStatus` e `TicketPriority`
-- [ ] Gerar e executar migrações
-- [ ] Criar formulários (`TicketType`, `CommentType`)
-- [ ] Implementar `TicketController` com ações: new, show, list, edit, changeStatus
-- [ ] Aplicar `access_control` e `IsGranted` nos controllers
-- [ ] Criar `TicketVoter` para regras finas de autorização
-- [ ] Criar templates Twig com Bootstrap para cada tela
+- [x] Criar entidades: `Category`, `Ticket`, `Comment`
+- [x] Definir Enums `TicketStatus` e `TicketPriority`
+- [x] Gerar e executar migrações
+- [x] Criar formulários (`TicketType`, `CommentType`)
+- [x] Implementar `TicketController` com ações: new, show, list, edit, changeStatus
+- [x] Aplicar `access_control` e `IsGranted` nos controllers
+- [x] Criar `TicketVoter` para regras finas de autorização
+- [x] Criar templates Twig com Bootstrap para cada tela
 
 ---
 
